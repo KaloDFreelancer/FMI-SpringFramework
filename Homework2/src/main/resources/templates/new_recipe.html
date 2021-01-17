@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html layout:decorate="~{fragments/main_layout}"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Create Recipe</title>
+</head>
+<body>
+<div class="container" layout:fragment="content">
+    <div class="container">
+        <h1 class="text-center">Create Recipe</h1>
+        <br/>
+        <form th:action="@{/recipes/new}" method="post" th:object="${recipe}" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="idInputName">Name</label>
+                <input aria-describedby="recipeHelp" class="form-control" id="idInputName" th:field="${recipe.name}"
+                       type="text">
+
+                <p class="alert alert-danger" th:errors="*{name}" th:if="${#fields.hasErrors('name')}"></p>
+            </div>
+            <div class="form-group">
+                <label for="idInputShortDescription">Short Description</label>
+                <input aria-describedby="recipeShortDescription" class="form-control" id="idInputShortDescription" th:field="${recipe.shortDescription}"
+                       type="text">
+
+                <p class="alert alert-danger" th:errors="*{shortDescription}" th:if="${#fields.hasErrors('shortDescription')}"></p>
+            </div>
+            <div class="form-group">
+                <label for="idInputTimeNeeded">Time Needed For Cooking in Minutes</label>
+                <input aria-describedby="recipeTimeNeeded" class="form-control" id="idInputTimeNeeded" th:field="${recipe.timeNeededForCooking}"
+                       type="number">
+
+                <p class="alert alert-danger" th:errors="*{timeNeededForCooking}"
+                   th:if="${#fields.hasErrors('timeNeededForCooking')}"></p>
+            </div>
+            <div class="form-group">
+                <label for="idInputProducts">Products (to be taken from DB)</label>
+                <select th:field="${recipe.products}" name="products" id="idInputProducts" multiple>
+                    <option value="cocoa">Cocoa</option>
+                    <option value="protein">Protein</option>
+                    <option value="cola">Cola</option>
+                    <option value="wine">Wine</option>
+                </select>
+                <p class="alert alert-danger" th:errors="*{products}" th:if="${#fields.hasErrors('products')}"></p>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Picture</label>
+                <div class="col-sm-10">
+                    <div class="custom-file">
+                        <input type="file" id="file" name="file" required="true" th:value="*{imageUrl}">
+                        <label th:text="${#strings.isEmpty(recipe.imageUrl)}? 'Choose file' : *{imageUrl}" class="custom-file-label" for="file">Choose picture file</label>
+                    </div>
+                </div>
+            </div>
+            <p th:if="${fileError != null}" class="errors alert alert-danger offset-sm-2 col-sm-10">
+                <span th:text="${fileError}"></span>
+            </p>
+            <div class="form-group">
+                <label for="idInputFullDescription">Full Description</label>
+                <input aria-describedby="recipeFullDescription" class="form-control" id="idInputFullDescription" th:field="${recipe.fullDescription}"
+                       type="text">
+
+                <p class="alert alert-danger" th:errors="*{fullDescription}" th:if="${#fields.hasErrors('fullDescription')}"></p>
+            </div>
+
+            <div class="form-group">
+                <label for="idInputTags">Tags (to be taken from DB)</label>
+                <select name="tags" id="idInputTags" multiple>
+                    <option value="good">Good</option>
+                    <option value="healthy">Healthy</option>
+                    <option value="vegan">Vegan</option>
+                    <option value="meat">Meat</option>
+                </select>
+                <p class="alert alert-danger" th:errors="*{tags}" th:if="${#fields.hasErrors('tags')}"></p>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+</body>

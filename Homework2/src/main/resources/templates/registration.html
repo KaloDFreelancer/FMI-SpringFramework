@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{fragments/main_layout}">
+<head>
+    <title>Registration</title>
+</head>
+<body>
+<div layout:fragment="content" class="container">
+    <div class="container">
+        <h3 th:text="${title}">Registration</h3>
+        <form th:object="${user}" method="post"
+              class="form-horizontal col-lg-12" enctype="multipart/form-data">
+
+            <div class="form-group row">
+                <label  class="col-form-label">Name</label>
+                <div class="">
+                    <input type="text" th:value="*{name}" id="name" name="name"
+                           class="form-control" title="Name" th:errorclass="field-error">
+                </div>
+                <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+                     class="errors alert alert-danger">
+                    Name is not valid.
+                </div>
+            </div>
+
+            <div th:if="${user.id} == null" class="form-group row">
+                <label path="username" class="col-form-label">Username</label>
+                <div>
+                    <input type="text" th:value="*{username}" id="username" name="username"
+                           class="form-control" title="Username" th:errorclass="field-error">
+                </div>
+                <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}"
+                          class="errors alert alert-danger ">
+                Username is not valid.
+            </div>
+            </div>
+
+
+            <div class="form-group row">
+                <label path="password" class="col-form-label">Password</label>
+                <div>
+                    <input type="password" th:value="*{password}" id="password" name="password"
+                           class="form-control" title="Password" th:errorclass="field-error">
+                </div>
+                <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+                         class="errors alert alert-danger ">
+                Password is not valid.
+            </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="gender">Gender</label>
+                    <select id="gender" name="gender" required="true">
+                        <option th:each="genderOpt : ${T(fmi.course.cookingwebapp.constant.Gender).values()}"
+                                th:value="${genderOpt}" th:text="${genderOpt}"></option>
+                    </select>
+
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Picture</label>
+                <div class="col-sm-10">
+                    <div class="custom-file">
+                        <input type="file" id="file" name="file" class="custom-file-input" th:value="*{imageUrl}">
+                        <label th:text="${#strings.isEmpty(user.imageUrl)}? 'Choose file' : *{imageUrl}" class="custom-file-label" for="file">Choose picture file</label>
+                    </div>
+                </div>
+            </div>
+            <p th:if="${fileError != null}" class="errors alert alert-danger offset-sm-2 col-sm-10">
+                <span th:text="${fileError}"></span>
+            </p>
+
+            <div class="form-group row">
+                <div class="offset-sm-2 col-sm-10">
+                    <button type="submit" class="btn btn-primary" id="submit" name="submit" value="submit">Submit</button>
+                    <button type="reset" class="btn btn-danger">Reset</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+</body>

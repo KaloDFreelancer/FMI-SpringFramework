@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html layout:decorate="~{fragments/main_layout}"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <title>All Recipes Page</title>
+</head>
+<body>
+<div class="container" layout:fragment="content">
+    <script>
+        $(document).ready(function () {
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#myTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+
+    <div class="jumbotron">
+        <h1>All Recipes Table</h1>
+
+        <div class="text-center" sec:authorize="hasAnyAuthority('USER', 'ADMIN')">
+            <a href="/recipes/new">Create New Recipe</a>
+        </div>
+
+        <br/><br/>
+
+        <br/><br/>
+        <p>Filter table:</p>
+        <input class="form-control" id="myInput" placeholder="Search.." type="text">
+        <br>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>Recipe ID</th>
+                    <th>Author Name</th>
+                    <th>Name</th>
+                    <th>Short Description</th>
+                    <th>Time Needed For Cooking in Minutes</th>
+                    <th>Products</th>
+                    <th>Image</th>
+                    <th>Full Description</th>
+                    <th>Tags</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody id="myTable">
+                <tr th:each="recipe : ${recipesList}">
+                    <td th:text="${recipe.id}">Recipe ID</td>
+                    <td th:text="${recipe.author.name}">Author Name</td>
+                    <td th:text="${recipe.name}">Name</td>
+                    <td th:text="${recipe.shortDescription}">Short Description</td>
+                    <td th:text="${recipe.timeNeededForCooking}">Time Needed For Cooking in Minutes</td>
+                    <td th:text="${recipe.products}">Products</td>
+                    <td th:if="${recipe.imageUrl} != null">
+                        <a href="#"  data-toggle="modal" data-target="#exampleModal"
+                           th:data-image-url="${'/uploads/' + recipe.imageUrl}"
+                           th:data-image-title="${recipe.name}">
+                            <img style="width: 100px; height: 100px;" th:if="${recipe.imageUrl != null}"
+                                 th:src="${'/uploads/' + recipe.imageUrl}">
+                        </a>
+                    </td>
+                    <td th:text="${recipe.fullDescription}">Full Description</td>
+                    <td th:text="${recipe.tags}">Tags</td>
+                    <td>
+                        <a th:href="@{'/recipes/edit/{id}'(id=${recipe.id})}">Edit</a>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <a class="btn btn-danger" th:href="@{'/recipes/delete/{id}'(id=${recipe.id})}">Delete</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

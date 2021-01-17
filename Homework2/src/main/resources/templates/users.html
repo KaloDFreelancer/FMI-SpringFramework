@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html layout:decorate="~{fragments/main_layout}"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>All Users Page</title>
+</head>
+<body>
+<div class="container" layout:fragment="content">
+    <script>
+        $(document).ready(function () {
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#myTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+
+    <div class="jumbotron">
+        <h1>All Users Table</span></h1>
+
+        <br/><br/>
+        <p>Filter table:</p>
+        <input class="form-control" id="myInput" placeholder="Search.." type="text">
+        <br>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Password</th>
+                    <th>Gender</th>
+                    <th>Image</th>
+                    <th>Account Status</th>
+                    <th>Role</th>
+                    <th>Short Description</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody id="myTable">
+                <tr th:each="user : ${usersList}">
+                    <td th:text="${user.id}">User ID</td>
+                    <td th:text="${user.name}">Name</td>
+                    <td th:text="${user.username}">Username</td>
+                    <td th:text="${user.password}">Password</td>
+                    <td th:text="${user.gender}">Gender</td>
+                    <td th:if="${user.imageUrl} != null">
+                        <a href="#"  data-toggle="modal" data-target="#exampleModal"
+                           th:data-image-url="${'/uploads/' + user.imageUrl}"
+                           th:data-image-title="${user.username}">
+                            <img class="img-thumbnail" th:if="${user.imageUrl != null}"
+                                 th:src="${'/uploads/' + user.imageUrl}">
+                        </a>
+                    </td>
+                    <td th:text="${user.accountStatus}">Account Status</td>
+                    <td th:text="${user.role}">Role</td>
+                    <td th:text="${user.shortDescription}">Short Description</td>
+                    <td>
+                        <a th:href="@{'/users/edit/{id}'(id=${user.id})}">Edit</a>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <a class="btn btn-danger" th:href="@{'/users/delete/{id}'(id=${user.id})}">Delete</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
